@@ -10,7 +10,7 @@
   <div class="max-w-6xl mx-auto">
     <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl">
       <h1 class="text-4xl font-bold mb-2 text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-        ⚡ Generador Clash Meta Pro 🔥
+        ⚡ Generador Clash Meta Profesional
       </h1>
       <p class="text-center text-gray-400 mb-6">Configuración avanzada con reglas completas</p>
       
@@ -321,22 +321,16 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - "*.lan"
-    - "localhost.ptlogin2.qq.com"
-  default-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
+    - "*.local"
+    - "+.msftncsi.com"
+    - "+.msftconnecttest.com"
   nameserver:
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
+    - 8.8.8.8
+    - 1.1.1.1
+    - 208.67.222.222
   fallback:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
-    - https://dns.quad9.net/dns-query
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
 
 proxies:
 `;
