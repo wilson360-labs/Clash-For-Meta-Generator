@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador Clash YAML</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+  <div class="max-w-2xl bg-gray-800 p-6 rounded-2xl shadow-lg w-full">
+    <h1 class="text-2xl font-bold mb-4 text-center">Generador de Archivo Clash</h1>
+    <textarea id="input" class="w-full h-48 p-3 bg-gray-700 rounded-lg focus:outline-none" placeholder="Pega aquí tus enlaces vmess://"></textarea>
+    <button id="generateBtn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">Generar file.yaml</button>
+    <a id="downloadLink" style="display:none" class="block mt-4 text-center text-green-400 underline">Descargar file.yaml</a>
+  </div>
+
+<script>
+function decodeVmess(vmessUrl) {
+  try {
+    const data = atob(vmessUrl.replace("vmess://", "").trim());
+    return JSON.parse(data);
+  } catch (err) {
+    console.error("Error al decodificar vmess:", err);
+    return null;
+  }
+}
+
+function generateClashYaml(proxies) {
+  let yaml = `port: 7890
+socks-port: 7891
+redir-port: 7892
+allow-lan: false
+mode: Rule
+log-level: info
+
+proxies:\n`;
+  
+  proxies.forEach(p => {
+    yaml += `  - name: ${p.ps || p.add}
+    type: vmess
+    server: ${p.add}
+    port: ${p.port}
+    uuid: ${p.id}
+    alterId: 0
+    cipher: auto
+    network: ${p.net}
+    tls: ${p.tls === "tls" ? "true" : "false"}
+    servername: ${p.add}
+`;
+  });
+
+  yaml += `
+proxy-groups:
+  - name: Auto
+    type: url-test
+    proxies:
+${proxies.map(p => "      - " + (p.ps || p.add)).join("\n")}
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+rules:
+  - FINAL,Auto
+`;
+  return yaml;
+}
+
+document.getElementById("generateBtn").addEventListener("click", () => {
+  const input = document.getElementById("input").value.trim();
+  if (!input) return alert("Por favor, pega tus enlaces vmess://");
+
+  const lines = input.split(/\n+/).map(l => l.trim()).filter(l => l.startsWith("vmess://"));
+  if (lines.length === 0) return alert("No se encontraron enlaces válidos.");
+
+  const proxies = lines.map(decodeVmess).filter(Boolean);
+  const yamlContent = generateClashYaml(proxies);
+
+  const blob = new Blob([yamlContent], { type: "text/yaml" });
+  const url = URL.createObjectURL(blob);
+  const link = document.getElementById("downloadLink");
+  link.href = url;
+  link.download = "file.yaml";
+  link.style.display = "block";
+});
+</script>
+</body>
+</html>
