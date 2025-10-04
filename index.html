@@ -240,11 +240,14 @@ function generateProxyConfig(proxy, index) {
     alterId: ${proxy.aid || 0}
     cipher: ${proxy.scy || 'auto'}
     udp: true
+    skip-cert-verify: true
     network: ${proxy.net || 'ws'}`;
     
     if (proxy.tls === "tls") {
-      config += `\n    tls: true\n    servername: ${proxy.sni || proxy.host || proxy.add}`;
-      if (proxy.skip) config += `\n    skip-cert-verify: ${proxy.skip === '1'}`;
+      config += `\n    tls: true`;
+      if (proxy.sni || proxy.host || proxy.add) {
+        config += `\n    servername: ${proxy.sni || proxy.host || proxy.add}`;
+      }
     }
     
     if (proxy.net === "ws") {
@@ -262,10 +265,12 @@ function generateProxyConfig(proxy, index) {
     port: ${proxy.port}
     uuid: ${proxy.id}
     udp: true
+    skip-cert-verify: true
     network: ${proxy.net}`;
     
     if (proxy.tls) {
-      config += `\n    tls: true\n    servername: ${proxy.sni}`;
+      config += `\n    tls: true`;
+      if (proxy.sni) config += `\n    servername: ${proxy.sni}`;
     }
     
     if (proxy.net === 'ws') {
@@ -279,7 +284,8 @@ function generateProxyConfig(proxy, index) {
     port: ${proxy.port}
     password: ${proxy.password}
     udp: true
-    sni: ${proxy.sni}`;
+    skip-cert-verify: true`;
+    if (proxy.sni) config += `\n    sni: ${proxy.sni}`;
   }
   else if (proxy.protocol === 'ss') {
     config += `    type: ss
@@ -304,33 +310,36 @@ port: ${options.httpPort}
 socks-port: ${options.socksPort}
 redir-port: 7892
 mixed-port: 7893
-allow-lan: ${options.allowLan}
-bind-address: "*"
-mode: rule
-log-level: info
+tproxy-port: 7895
 ipv6: ${options.enableIPv6}
-external-controller: 127.0.0.1:9090
-external-ui: ui
+mode: rule
+log-level: silent
+allow-lan: ${options.allowLan}
+external-controller: 0.0.0.0:9090
 secret: ""
+bind-address: "*"
+unified-delay: true
+profile:
+  store-selected: true
 
 dns:
   enable: true
   ipv6: ${options.enableIPv6}
-  listen: 0.0.0.0:53
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    - "*.lan"
-    - "*.local"
-    - "+.msftncsi.com"
-    - "+.msftconnecttest.com"
+  enhanced-mode: redir-host
+  listen: 0.0.0.0:7874
   nameserver:
     - 8.8.8.8
-    - 1.1.1.1
-    - 208.67.222.222
-  fallback:
+    - 1.0.0.1
     - https://dns.google/dns-query
+  fallback:
+    - 1.1.1.1
+    - 8.8.4.4
     - https://cloudflare-dns.com/dns-query
+    - 112.215.203.254
+  default-nameserver:
+    - 8.8.8.8
+    - 1.1.1.1
+    - 112.215.203.254
 
 proxies:
 `;
@@ -575,10 +584,16 @@ rules:
   - DOMAIN-SUFFIX,amazon.com,🚀 Selección Manual
   - DOMAIN-SUFFIX,microsoft.com,🚀 Selección Manual
   - DOMAIN-SUFFIX,live.com,🚀 Selección Manual
-  - GEOIP,CN,🎯 DIRECTO
-  - MATCH,🐟 Otros
+  - IP-CIDR,192.168.0.0/16,🎯 DIRECTO
+  - IP-CIDR,10.0.0.0/8,🎯 DIRECTO
+  - IP-CIDR,172.16.0.0/12,🎯 DIRECTO
+  - IP-CIDR,127.0.0.0/8,🎯 DIRECTO
+  - IP-CIDR,100.64.0.0/10,🎯 DIRECTO
+  - IP-CIDR,224.0.0.0/4,🎯 DIRECTO
+  - IP-CIDR,fe80::/10,🎯 DIRECTO
+  - MATCH,🚀 Selección Manual
 `;
-  ruleCount += 7;
+  ruleCount += 13;
 
   return { yaml, ruleCount };
 }
