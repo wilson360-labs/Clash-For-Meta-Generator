@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clash Meta Pro - Generador Profesional</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <style>
   .tab-button { transition: all 0.3s; }
   .tab-button.active { background: linear-gradient(to right, #3b82f6, #8b5cf6); }
@@ -1181,6 +1182,54 @@ function clearHistory() {
     historyData = [];
     loadHistory();
   }
+}
+
+// Generar link de importación y QR
+function generateImportLink() {
+  if (!currentYamlContent) {
+    alert("Primero genera una configuración YAML");
+    return;
+  }
+
+  // Convertir YAML a Base64
+  const base64Config = btoa(unescape(encodeURIComponent(currentYamlContent)));
+  
+  // Generar link de importación para Clash
+  const importLink = `clash://install-config?url=${encodeURIComponent('data:text/yaml;charset=utf-8;base64,' + base64Config)}`;
+  
+  // Mostrar el link
+  document.getElementById("importLinkInput").value = importLink;
+  document.getElementById("importSection").classList.remove("hidden");
+  
+  // Generar QR Code
+  const qrContainer = document.getElementById("qrcode");
+  qrContainer.innerHTML = ''; // Limpiar QR anterior
+  
+  new QRCode(qrContainer, {
+    text: importLink,
+    width: 256,
+    height: 256,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  // Scroll suave hacia el QR
+  document.getElementById("importSection").scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Copiar link de importación
+function copyImportLink() {
+  const input = document.getElementById("importLinkInput");
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = "✅";
+    setTimeout(() => {
+      btn.textContent = originalText;
+    }, 2000);
+  });
 }
 
 // Inicializar
