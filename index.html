@@ -150,9 +150,46 @@ ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwYXNzd29yZA==@..."></textarea>
             </p>
           </div>
           
-          <a id="downloadLink" class="block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105 mb-4">
-            ⬇️ Descargar config.yaml
-          </a>
+          <div class="grid md:grid-cols-2 gap-3 mb-4">
+            <a id="downloadLink" class="block bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105">
+              ⬇️ Descargar YAML
+            </a>
+            <button onclick="generateImportLink()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105">
+              📱 Importar a Clash
+            </button>
+          </div>
+
+          <div id="importSection" class="hidden mb-4">
+            <div class="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg p-6">
+              <h3 class="text-lg font-bold mb-4 text-center">📱 Importación Directa</h3>
+              
+              <div class="bg-gray-800 p-3 rounded-lg mb-4">
+                <label class="block text-xs text-gray-400 mb-2">Link de importación:</label>
+                <div class="flex gap-2">
+                  <input id="importLinkInput" type="text" readonly class="flex-1 bg-gray-700 p-2 rounded text-xs font-mono" onclick="this.select()">
+                  <button onclick="copyImportLink()" class="bg-blue-600 hover:bg-blue-700 px-4 rounded text-sm">
+                    📋
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center mb-4">
+                <p class="text-sm text-gray-300 mb-3">Escanea este QR desde tu dispositivo móvil:</p>
+                <div class="bg-white p-4 rounded-lg inline-block">
+                  <canvas id="qrcode" class="mx-auto"></canvas>
+                </div>
+              </div>
+
+              <div class="bg-blue-900/30 border border-blue-500/50 rounded p-3">
+                <p class="text-xs text-gray-300">
+                  <strong>💡 Cómo usar:</strong><br>
+                  1. Copia el link o escanea el QR<br>
+                  2. Ábrelo en tu app Clash/Clash Meta<br>
+                  3. La configuración se importará automáticamente
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div class="bg-gray-700 p-4 rounded-lg">
             <div class="flex justify-between items-center mb-2">
