@@ -3,148 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generador Clash Meta Pro</title>
+<title>Clash Meta Pro - Generador Profesional</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .tab-button { transition: all 0.3s; }
+  .tab-button.active { background: linear-gradient(to right, #3b82f6, #8b5cf6); }
+  .tab-content { display: none; animation: fadeIn 0.3s; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .server-card { transition: all 0.2s; }
+  .server-card:hover { transform: translateY(-2px); }
+</style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white min-h-screen py-8 px-4">
-  <div class="max-w-6xl mx-auto">
-    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl">
-      <h1 class="text-4xl font-bold mb-2 text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-        ⚡ Generador Clash Meta Profesional
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-5xl font-bold mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+        ⚡ Clash Meta Pro
       </h1>
-      <p class="text-center text-gray-400 mb-6">Configuración avanzada con reglas completas</p>
+      <p class="text-gray-400">Generador Profesional de Configuraciones VPN</p>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="bg-gray-800 rounded-t-2xl p-2 flex flex-wrap gap-2">
+      <button onclick="switchTab('generator')" class="tab-button active flex-1 min-w-[120px] py-3 px-4 rounded-lg font-semibold">
+        🏠 Generador
+      </button>
+      <button onclick="switchTab('import')" class="tab-button flex-1 min-w-[120px] py-3 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600">
+        📥 Importar URL
+      </button>
+      <button onclick="switchTab('templates')" class="tab-button flex-1 min-w-[120px] py-3 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600">
+        🎨 Plantillas
+      </button>
+      <button onclick="switchTab('validator')" class="tab-button flex-1 min-w-[120px] py-3 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600">
+        🧪 Validador
+      </button>
+      <button onclick="switchTab('history')" class="tab-button flex-1 min-w-[120px] py-3 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600">
+        📊 Historial
+      </button>
+    </div>
+
+    <!-- Tabs Content -->
+    <div class="bg-gray-800 rounded-b-2xl shadow-2xl p-8">
       
-      <div class="grid md:grid-cols-2 gap-6 mb-6">
-        <div class="bg-gray-700 p-4 rounded-lg">
-          <h2 class="text-lg font-semibold mb-3 flex items-center">
-            <span class="mr-2">🔧</span> Configuración General
-          </h2>
-          <div class="space-y-3">
-            <div>
-              <label class="block text-sm mb-1">Nombre del perfil:</label>
-              <input id="profileName" type="text" value="Mi Configuración VPN" class="w-full bg-gray-600 p-2 rounded text-sm">
+      <!-- TAB 1: GENERADOR -->
+      <div id="tab-generator" class="tab-content active">
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-gray-700 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-3 flex items-center">
+              <span class="mr-2">🔧</span> Configuración General
+            </h2>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm mb-1">Nombre del perfil:</label>
+                <input id="profileName" type="text" value="Mi Configuración VPN" class="w-full bg-gray-600 p-2 rounded text-sm">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-sm mb-1">Puerto HTTP:</label>
+                  <input id="httpPort" type="number" value="7890" class="w-full bg-gray-600 p-2 rounded text-sm">
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">Puerto SOCKS5:</label>
+                  <input id="socksPort" type="number" value="7891" class="w-full bg-gray-600 p-2 rounded text-sm">
+                </div>
+              </div>
+              <div>
+                <label class="flex items-center cursor-pointer">
+                  <input id="allowLan" type="checkbox" class="mr-2">
+                  <span class="text-sm">Permitir LAN</span>
+                </label>
+              </div>
+              <div>
+                <label class="flex items-center cursor-pointer">
+                  <input id="enableIPv6" type="checkbox" class="mr-2">
+                  <span class="text-sm">Habilitar IPv6</span>
+                </label>
+              </div>
             </div>
-            <div>
-              <label class="block text-sm mb-1">Puerto HTTP:</label>
-              <input id="httpPort" type="number" value="7890" class="w-full bg-gray-600 p-2 rounded text-sm">
-            </div>
-            <div>
-              <label class="block text-sm mb-1">Puerto SOCKS5:</label>
-              <input id="socksPort" type="number" value="7891" class="w-full bg-gray-600 p-2 rounded text-sm">
-            </div>
-            <div>
+          </div>
+
+          <div class="bg-gray-700 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-3 flex items-center">
+              <span class="mr-2">📋</span> Reglas y Grupos
+            </h2>
+            <div class="space-y-2">
               <label class="flex items-center cursor-pointer">
-                <input id="allowLan" type="checkbox" class="mr-2">
-                <span class="text-sm">Permitir LAN</span>
+                <input id="ruleStreaming" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Streaming (Netflix, Disney+, HBO)</span>
               </label>
-            </div>
-            <div>
               <label class="flex items-center cursor-pointer">
-                <input id="enableIPv6" type="checkbox" class="mr-2">
-                <span class="text-sm">Habilitar IPv6</span>
+                <input id="ruleSocial" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Redes Sociales</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input id="ruleGoogle" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Google y YouTube</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input id="ruleAI" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Servicios de IA</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input id="ruleGaming" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Gaming</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input id="ruleAds" type="checkbox" checked class="mr-2">
+                <span class="text-sm">Bloqueo de Anuncios</span>
               </label>
             </div>
           </div>
         </div>
 
-        <div class="bg-gray-700 p-4 rounded-lg">
-          <h2 class="text-lg font-semibold mb-3 flex items-center">
-            <span class="mr-2">📋</span> Opciones de Reglas
-          </h2>
-          <div class="space-y-2">
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleStreaming" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Reglas de Streaming (Netflix, Disney+, etc.)</span>
-            </label>
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleSocial" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Redes Sociales (Facebook, Twitter, Instagram)</span>
-            </label>
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleGoogle" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Servicios Google y YouTube</span>
-            </label>
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleAI" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Servicios de IA (ChatGPT, Claude, etc.)</span>
-            </label>
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleGaming" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Gaming y Entretenimiento</span>
-            </label>
-            <label class="flex items-center cursor-pointer">
-              <input id="ruleAds" type="checkbox" checked class="mr-2">
-              <span class="text-sm">Bloqueo de Anuncios</span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-6 p-4 bg-gray-700 rounded-lg">
-        <h2 class="text-lg font-semibold mb-2">📋 Instrucciones:</h2>
-        <ul class="text-sm text-gray-300 space-y-1">
-          <li>• Soporta: vmess://, vless://, trojan://, ss:// (Shadowsocks)</li>
-          <li>• Pega tus enlaces (uno por línea)</li>
-          <li>• Configura las opciones según tus necesidades</li>
-          <li>• Haz clic en "Generar YAML Profesional"</li>
-        </ul>
-      </div>
-
-      <textarea 
-        id="input" 
-        class="w-full h-80 p-4 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm" 
-        placeholder="Pega aquí tus enlaces de proxy:
-vmess://eyJ2IjoiMiIsInBzIjoiU2Vydmlkb3IgMSIsImFkZCI6IjE5Mi4xNjguMS4xIiwicG9ydCI6IjQ0MyIsImlkIjoiMTIzNDU2NzgtYWJjZC0xMjM0LWFiY2QtMTIzNDU2Nzg5MGFiIiwiYWlkIjoiMCIsIm5ldCI6IndzIiwidHlwZSI6Im5vbmUiLCJob3N0IjoiIiwicGF0aCI6Ii8iLCJ0bHMiOiJ0bHMifQ==
-vless://...
-trojan://...
-ss://..."></textarea>
-      
-      <div class="mt-4 flex gap-4">
-        <button id="generateBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105">
-          🚀 Generar YAML Profesional
-        </button>
-        <button id="clearBtn" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all">
-          🗑️ Limpiar
-        </button>
-      </div>
-
-      <div id="result" class="mt-6 hidden">
-        <div class="bg-green-900/30 border border-green-500 rounded-lg p-4 mb-4">
-          <p class="text-green-400 font-semibold">✅ Archivo generado exitosamente</p>
-          <p class="text-sm text-gray-300 mt-1">
-            Proxies: <span id="proxyCount" class="font-bold">0</span> | 
-            Grupos: <span id="groupCount" class="font-bold">0</span> | 
-            Reglas: <span id="ruleCount" class="font-bold">0</span>
+        <div class="mb-4 p-3 bg-blue-900/30 border border-blue-500/50 rounded-lg">
+          <p class="text-sm">
+            <strong>💡 Soporta:</strong> VMess, VLESS, Trojan, Shadowsocks | WebSocket, gRPC, HTTP/2 | Compatible con CDN
           </p>
         </div>
+
+        <textarea 
+          id="input" 
+          class="w-full h-64 p-4 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm mb-4" 
+          placeholder="Pega tus enlaces aquí (uno por línea):
+
+vmess://eyJ2IjoiMiIsInBzIjoi...
+vless://uuid@servidor.com:443?type=ws...
+trojan://password@servidor.com:443...
+ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwYXNzd29yZA==@..."></textarea>
         
-        <a id="downloadLink" class="block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105 mb-4">
-          ⬇️ Descargar config.yaml
-        </a>
+        <div class="flex gap-4">
+          <button onclick="generateYaml()" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105">
+            🚀 Generar YAML
+          </button>
+          <button onclick="clearAll()" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all">
+            🗑️ Limpiar
+          </button>
+        </div>
 
-        <div class="bg-gray-700 p-4 rounded-lg">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="font-semibold">Vista previa del archivo:</h3>
-            <button id="copyBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-1 rounded text-sm">
-              📋 Copiar
-            </button>
+        <div id="generatorResult" class="mt-6 hidden">
+          <div class="bg-green-900/30 border border-green-500 rounded-lg p-4 mb-4">
+            <p class="text-green-400 font-semibold">✅ Archivo generado exitosamente</p>
+            <p class="text-sm text-gray-300 mt-1">
+              Proxies: <span id="proxyCount">0</span> | Grupos: <span id="groupCount">0</span> | Reglas: <span id="ruleCount">0</span>
+            </p>
           </div>
-          <pre id="preview" class="bg-gray-900 p-4 rounded-lg text-xs overflow-x-auto max-h-96 overflow-y-auto"></pre>
+          
+          <a id="downloadLink" class="block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105 mb-4">
+            ⬇️ Descargar config.yaml
+          </a>
+
+          <div class="bg-gray-700 p-4 rounded-lg">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-semibold">Vista previa:</h3>
+              <button onclick="copyToClipboard()" class="bg-blue-600 hover:bg-blue-700 px-4 py-1 rounded text-sm">
+                📋 Copiar
+              </button>
+            </div>
+            <pre id="preview" class="bg-gray-900 p-4 rounded-lg text-xs overflow-x-auto max-h-96 overflow-y-auto"></pre>
+          </div>
         </div>
       </div>
 
-      <div id="error" class="mt-6 hidden">
-        <div class="bg-red-900/30 border border-red-500 rounded-lg p-4">
-          <p class="text-red-400 font-semibold">❌ Error</p>
-          <p id="errorMsg" class="text-sm text-gray-300 mt-1"></p>
+      <!-- TAB 2: IMPORTAR URL -->
+      <div id="tab-import" class="tab-content">
+        <h2 class="text-2xl font-bold mb-4">📥 Importar desde URL de Suscripción</h2>
+        
+        <div class="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 mb-4">
+          <p class="text-sm">
+            <strong>💡 Tip:</strong> Muchos proveedores VPN ofrecen URLs de suscripción que se actualizan automáticamente
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm mb-2">URL de suscripción:</label>
+          <input id="subscriptionUrl" type="url" placeholder="https://ejemplo.com/subscription?token=..." class="w-full bg-gray-700 p-3 rounded-lg text-sm mb-2">
+          <button onclick="importFromUrl()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg">
+            🔗 Importar Proxies
+          </button>
+        </div>
+
+        <div id="importResult" class="hidden">
+          <div class="bg-green-900/30 border border-green-500 rounded-lg p-4 mb-4">
+            <p class="text-green-400 font-semibold">✅ Proxies importados exitosamente</p>
+            <p class="text-sm text-gray-300 mt-1">Se encontraron <span id="importCount">0</span> servidores</p>
+          </div>
+          <button onclick="useImportedProxies()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg">
+            ✨ Usar estos proxies en el generador
+          </button>
+        </div>
+
+        <div id="importError" class="hidden mt-4">
+          <div class="bg-red-900/30 border border-red-500 rounded-lg p-4">
+            <p class="text-red-400 font-semibold">❌ Error al importar</p>
+            <p id="importErrorMsg" class="text-sm text-gray-300 mt-1"></p>
+          </div>
         </div>
       </div>
+
+      <!-- TAB 3: PLANTILLAS -->
+      <div id="tab-templates" class="tab-content">
+        <h2 class="text-2xl font-bold mb-4">🎨 Plantillas Predefinidas</h2>
+        
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-gradient-to-br from-red-900/50 to-red-700/50 p-6 rounded-lg border border-red-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('streaming')">
+            <h3 class="text-xl font-bold mb-2">🎬 Streaming 4K</h3>
+            <p class="text-sm text-gray-300 mb-3">Optimizado para Netflix, Disney+, HBO Max, Prime Video</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Prioridad a servidores de streaming</li>
+              <li>✓ Balance de carga optimizado</li>
+              <li>✓ Sin bloqueo de anuncios (mejor compatibilidad)</li>
+            </ul>
+          </div>
+
+          <div class="bg-gradient-to-br from-purple-900/50 to-purple-700/50 p-6 rounded-lg border border-purple-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('gaming')">
+            <h3 class="text-xl font-bold mb-2">🎮 Gaming Pro</h3>
+            <p class="text-sm text-gray-300 mb-3">Baja latencia para juegos online</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Selección por latencia mínima</li>
+              <li>✓ UDP habilitado</li>
+              <li>✓ Servidores más cercanos primero</li>
+            </ul>
+          </div>
+
+          <div class="bg-gradient-to-br from-green-900/50 to-green-700/50 p-6 rounded-lg border border-green-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('privacy')">
+            <h3 class="text-xl font-bold mb-2">🔒 Máxima Privacidad</h3>
+            <p class="text-sm text-gray-300 mb-3">Seguridad y anonimato total</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Bloqueo agresivo de rastreadores</li>
+              <li>✓ DNS encriptado (DoH)</li>
+              <li>✓ Sin logs, sin fugas</li>
+            </ul>
+          </div>
+
+          <div class="bg-gradient-to-br from-yellow-900/50 to-yellow-700/50 p-6 rounded-lg border border-yellow-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('china')">
+            <h3 class="text-xl font-bold mb-2">🚀 Bypass China</h3>
+            <p class="text-sm text-gray-300 mb-3">Optimizado para GFW (Great Firewall)</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Protocolos de ofuscación</li>
+              <li>✓ Múltiples fallbacks</li>
+              <li>✓ Servidores en Hong Kong/Japón</li>
+            </ul>
+          </div>
+
+          <div class="bg-gradient-to-br from-blue-900/50 to-blue-700/50 p-6 rounded-lg border border-blue-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('balanced')">
+            <h3 class="text-xl font-bold mb-2">⚖️ Balanceado</h3>
+            <p class="text-sm text-gray-300 mb-3">Configuración equilibrada para uso general</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Todas las reglas habilitadas</li>
+              <li>✓ Auto-selección inteligente</li>
+              <li>✓ Mejor para uso diario</li>
+            </ul>
+          </div>
+
+          <div class="bg-gradient-to-br from-pink-900/50 to-pink-700/50 p-6 rounded-lg border border-pink-500/30 cursor-pointer hover:scale-105 transition-all" onclick="applyTemplate('social')">
+            <h3 class="text-xl font-bold mb-2">📱 Redes Sociales</h3>
+            <p class="text-sm text-gray-300 mb-3">Optimizado para Instagram, TikTok, Twitter</p>
+            <ul class="text-xs space-y-1">
+              <li>✓ Prioridad a redes sociales</li>
+              <li>✓ Carga rápida de medios</li>
+              <li>✓ Stories y videos fluidos</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="templateApplied" class="mt-6 hidden">
+          <div class="bg-green-900/30 border border-green-500 rounded-lg p-4">
+            <p class="text-green-400 font-semibold">✅ Plantilla aplicada</p>
+            <p class="text-sm text-gray-300 mt-1">Ve a la pestaña "Generador" para crear tu archivo YAML</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: VALIDADOR -->
+      <div id="tab-validator" class="tab-content">
+        <h2 class="text-2xl font-bold mb-4">🧪 Validador de Enlaces</h2>
+        
+        <textarea 
+          id="validatorInput" 
+          class="w-full h-64 p-4 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm mb-4" 
+          placeholder="Pega tus enlaces para validarlos..."></textarea>
+        
+        <button onclick="validateLinks()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg mb-4">
+          🔍 Validar Enlaces
+        </button>
+
+        <div id="validationResults"></div>
+      </div>
+
+      <!-- TAB 5: HISTORIAL -->
+      <div id="tab-history" class="tab-content">
+        <h2 class="text-2xl font-bold mb-4">📊 Historial de Configuraciones</h2>
+        
+        <div class="mb-4 flex gap-2">
+          <button onclick="loadHistory()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">
+            🔄 Actualizar
+          </button>
+          <button onclick="clearHistory()" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg">
+            🗑️ Limpiar Historial
+          </button>
+        </div>
+
+        <div id="historyList" class="space-y-3"></div>
+      </div>
+
     </div>
   </div>
 
 <script>
-let yamlContent = '';
+let currentYamlContent = '';
+let importedProxies = [];
+let historyData = [];
 
+// Tab switching
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-button').forEach(el => {
+    el.classList.remove('active', 'bg-gradient-to-r', 'from-blue-600', 'to-purple-600');
+    el.classList.add('bg-gray-700', 'hover:bg-gray-600');
+  });
+  
+  document.getElementById('tab-' + tabName).classList.add('active');
+  event.target.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+  event.target.classList.add('active');
+}
+
+// Decodificadores
 function decodeVmess(vmessUrl) {
   try {
     const data = atob(vmessUrl.replace("vmess://", "").trim());
@@ -152,7 +337,6 @@ function decodeVmess(vmessUrl) {
     parsed.protocol = 'vmess';
     return parsed;
   } catch (err) {
-    console.error("Error al decodificar vmess:", err);
     return null;
   }
 }
@@ -169,12 +353,15 @@ function decodeVless(vlessUrl) {
       id: url.username,
       net: params.get('type') || 'tcp',
       tls: params.get('security') || '',
+      security: params.get('security') || '',
       sni: params.get('sni') || url.hostname,
       host: params.get('host') || '',
-      path: params.get('path') || '/'
+      path: params.get('path') || '/',
+      flow: params.get('flow') || '',
+      pbk: params.get('pbk') || '',
+      sid: params.get('sid') || ''
     };
   } catch (err) {
-    console.error("Error al decodificar vless:", err);
     return null;
   }
 }
@@ -190,10 +377,11 @@ function decodeTrojan(trojanUrl) {
       port: url.port || 443,
       password: url.username,
       sni: params.get('sni') || url.hostname,
-      net: params.get('type') || 'tcp'
+      net: params.get('type') || 'tcp',
+      path: params.get('path') || '',
+      host: params.get('host') || ''
     };
   } catch (err) {
-    console.error("Error al decodificar trojan:", err);
     return null;
   }
 }
@@ -215,7 +403,6 @@ function decodeShadowsocks(ssUrl) {
       cipher: method
     };
   } catch (err) {
-    console.error("Error al decodificar shadowsocks:", err);
     return null;
   }
 }
@@ -230,67 +417,107 @@ function parseProxy(line) {
 
 function generateProxyConfig(proxy, index) {
   const name = proxy.ps || `Servidor-${index + 1}`;
-  let config = `  - name: "${name}"\n`;
+  let config = `  - name: ${name}\n`;
 
   if (proxy.protocol === 'vmess') {
-    config += `    type: vmess
-    server: ${proxy.add}
+    config += `    server: ${proxy.add}
     port: ${proxy.port || 443}
+    type: vmess
     uuid: ${proxy.id}
     alterId: ${proxy.aid || 0}
-    cipher: ${proxy.scy || 'auto'}
-    udp: true
-    skip-cert-verify: true
-    network: ${proxy.net || 'ws'}`;
+    cipher: ${proxy.scy || 'auto'}`;
     
-    if (proxy.tls === "tls") {
-      config += `\n    tls: true`;
-      if (proxy.sni || proxy.host || proxy.add) {
-        config += `\n    servername: ${proxy.sni || proxy.host || proxy.add}`;
+    if (proxy.tls === "tls" || proxy.tls === "true") {
+      config += `\n    tls: true\n    skip-cert-verify: true`;
+      if (proxy.sni || proxy.host) {
+        config += `\n    servername: ${proxy.sni || proxy.host || ''}`;
+      } else {
+        config += `\n    servername: ""`;
       }
     }
     
-    if (proxy.net === "ws") {
-      config += `\n    ws-opts:\n      path: ${proxy.path || '/'}`;
-      if (proxy.host) config += `\n      headers:\n        Host: ${proxy.host}`;
-    }
+    config += `\n    udp: true`;
     
-    if (proxy.net === "grpc") {
-      config += `\n    grpc-opts:\n      grpc-service-name: ${proxy.path || 'grpc'}`;
+    const network = proxy.net || 'tcp';
+    if (network !== 'tcp') {
+      config += `\n    network: ${network}`;
+      
+      if (network === "ws") {
+        config += `\n    ws-opts:\n      path: ${proxy.path || '/'}`;
+        if (proxy.host) config += `\n      headers:\n        Host: ${proxy.host}`;
+      }
+      
+      if (network === "h2" || network === "http") {
+        config += `\n    h2-opts:\n      host:`;
+        const hosts = proxy.host ? proxy.host.split(',') : [proxy.add];
+        hosts.forEach(h => { config += `\n        - ${h.trim()}`; });
+        config += `\n      path: ${proxy.path || '/'}`;
+      }
+      
+      if (network === "grpc") {
+        config += `\n    grpc-opts:\n      grpc-service-name: ${proxy.path || 'grpc'}`;
+      }
     }
   } 
   else if (proxy.protocol === 'vless') {
-    config += `    type: vless
-    server: ${proxy.add}
+    config += `    server: ${proxy.add}
     port: ${proxy.port}
-    uuid: ${proxy.id}
-    udp: true
-    skip-cert-verify: true
-    network: ${proxy.net}`;
+    type: vless
+    uuid: ${proxy.id}`;
     
-    if (proxy.tls) {
-      config += `\n    tls: true`;
+    if (proxy.flow) config += `\n    flow: ${proxy.flow}`;
+    
+    if (proxy.tls || proxy.security === 'tls' || proxy.security === 'reality') {
+      config += `\n    tls: true\n    skip-cert-verify: true`;
       if (proxy.sni) config += `\n    servername: ${proxy.sni}`;
+      
+      if (proxy.security === 'reality') {
+        config += `\n    reality-opts:`;
+        if (proxy.pbk) config += `\n      public-key: ${proxy.pbk}`;
+        if (proxy.sid) config += `\n      short-id: ${proxy.sid}`;
+      }
     }
     
-    if (proxy.net === 'ws') {
-      config += `\n    ws-opts:\n      path: ${proxy.path}`;
-      if (proxy.host) config += `\n      headers:\n        Host: ${proxy.host}`;
+    config += `\n    udp: true`;
+    
+    const network = proxy.net || 'tcp';
+    if (network !== 'tcp') {
+      config += `\n    network: ${network}`;
+      if (network === 'ws') {
+        config += `\n    ws-opts:\n      path: ${proxy.path || '/'}`;
+        if (proxy.host) config += `\n      headers:\n        Host: ${proxy.host}`;
+      }
+      if (network === 'grpc') {
+        config += `\n    grpc-opts:\n      grpc-service-name: ${proxy.path || 'grpc'}`;
+      }
     }
   }
   else if (proxy.protocol === 'trojan') {
-    config += `    type: trojan
-    server: ${proxy.add}
+    config += `    server: ${proxy.add}
     port: ${proxy.port}
+    type: trojan
     password: ${proxy.password}
-    udp: true
-    skip-cert-verify: true`;
+    skip-cert-verify: true
+    udp: true`;
+    
     if (proxy.sni) config += `\n    sni: ${proxy.sni}`;
+    
+    const network = proxy.net || 'tcp';
+    if (network !== 'tcp') {
+      config += `\n    network: ${network}`;
+      if (network === 'ws') {
+        config += `\n    ws-opts:\n      path: ${proxy.path || '/'}`;
+        if (proxy.host) config += `\n      headers:\n        Host: ${proxy.host}`;
+      }
+      if (network === 'grpc') {
+        config += `\n    grpc-opts:\n      grpc-service-name: ${proxy.path || 'grpc'}`;
+      }
+    }
   }
   else if (proxy.protocol === 'ss') {
-    config += `    type: ss
-    server: ${proxy.add}
+    config += `    server: ${proxy.add}
     port: ${proxy.port}
+    type: ss
     cipher: ${proxy.cipher}
     password: ${proxy.password}
     udp: true`;
@@ -476,12 +703,8 @@ rules:
   - DOMAIN-KEYWORD,adservice,🛡️ Bloqueo Anuncios
   - DOMAIN-KEYWORD,analytics,🛡️ Bloqueo Anuncios
   - DOMAIN-KEYWORD,advertise,🛡️ Bloqueo Anuncios
-  - DOMAIN-SUFFIX,ads.google.com,🛡️ Bloqueo Anuncios
-  - DOMAIN-SUFFIX,adcolony.com,🛡️ Bloqueo Anuncios
-  - DOMAIN-SUFFIX,applovin.com,🛡️ Bloqueo Anuncios
-  - DOMAIN-SUFFIX,unity3d.com,🛡️ Bloqueo Anuncios
 `;
-    ruleCount += 11;
+    ruleCount += 7;
   }
 
   if (options.ruleStreaming) {
@@ -489,57 +712,45 @@ rules:
   # Servicios de Streaming
   - DOMAIN-SUFFIX,netflix.com,🎬 Streaming
   - DOMAIN-SUFFIX,nflxvideo.net,🎬 Streaming
-  - DOMAIN-SUFFIX,nflximg.net,🎬 Streaming
   - DOMAIN-SUFFIX,disneyplus.com,🎬 Streaming
   - DOMAIN-SUFFIX,hulu.com,🎬 Streaming
   - DOMAIN-SUFFIX,primevideo.com,🎬 Streaming
   - DOMAIN-SUFFIX,hbomax.com,🎬 Streaming
   - DOMAIN-SUFFIX,spotify.com,🎬 Streaming
   - DOMAIN-SUFFIX,twitch.tv,🎬 Streaming
-  - DOMAIN-SUFFIX,dazn.com,🎬 Streaming
   - DOMAIN-KEYWORD,netflix,🎬 Streaming
-  - DOMAIN-KEYWORD,disney,🎬 Streaming
 `;
-    ruleCount += 12;
+    ruleCount += 9;
   }
 
   if (options.ruleSocial) {
     yaml += `
   # Redes Sociales
   - DOMAIN-SUFFIX,facebook.com,📱 Redes Sociales
-  - DOMAIN-SUFFIX,fbcdn.net,📱 Redes Sociales
   - DOMAIN-SUFFIX,instagram.com,📱 Redes Sociales
-  - DOMAIN-SUFFIX,cdninstagram.com,📱 Redes Sociales
   - DOMAIN-SUFFIX,twitter.com,📱 Redes Sociales
   - DOMAIN-SUFFIX,x.com,📱 Redes Sociales
-  - DOMAIN-SUFFIX,twimg.com,📱 Redes Sociales
   - DOMAIN-SUFFIX,tiktok.com,📱 Redes Sociales
   - DOMAIN-SUFFIX,telegram.org,📱 Redes Sociales
   - DOMAIN-SUFFIX,whatsapp.com,📱 Redes Sociales
   - DOMAIN-SUFFIX,reddit.com,📱 Redes Sociales
-  - DOMAIN-SUFFIX,snapchat.com,📱 Redes Sociales
 `;
-    ruleCount += 12;
+    ruleCount += 8;
   }
 
   if (options.ruleGoogle) {
     yaml += `
   # Servicios Google
   - DOMAIN-SUFFIX,google.com,🔍 Google
-  - DOMAIN-SUFFIX,google.com.hk,🔍 Google
   - DOMAIN-SUFFIX,googleapis.com,🔍 Google
-  - DOMAIN-SUFFIX,googleapis.cn,🔍 Google
-  - DOMAIN-SUFFIX,googleusercontent.com,🔍 Google
-  - DOMAIN-SUFFIX,gstatic.com,🔍 Google
   - DOMAIN-SUFFIX,youtube.com,🔍 Google
   - DOMAIN-SUFFIX,ytimg.com,🔍 Google
   - DOMAIN-SUFFIX,googlevideo.com,🔍 Google
   - DOMAIN-SUFFIX,gmail.com,🔍 Google
-  - DOMAIN-SUFFIX,gvt1.com,🔍 Google
   - DOMAIN-KEYWORD,google,🔍 Google
   - DOMAIN-KEYWORD,youtube,🔍 Google
 `;
-    ruleCount += 13;
+    ruleCount += 8;
   }
 
   if (options.ruleAI) {
@@ -549,73 +760,47 @@ rules:
   - DOMAIN-SUFFIX,ai.com,🤖 Servicios IA
   - DOMAIN-SUFFIX,anthropic.com,🤖 Servicios IA
   - DOMAIN-SUFFIX,claude.ai,🤖 Servicios IA
-  - DOMAIN-SUFFIX,gemini.google.com,🤖 Servicios IA
   - DOMAIN-SUFFIX,midjourney.com,🤖 Servicios IA
   - DOMAIN-SUFFIX,perplexity.ai,🤖 Servicios IA
-  - DOMAIN-SUFFIX,character.ai,🤖 Servicios IA
   - DOMAIN-KEYWORD,openai,🤖 Servicios IA
   - DOMAIN-KEYWORD,chatgpt,🤖 Servicios IA
 `;
-    ruleCount += 10;
+    ruleCount += 8;
   }
 
   if (options.ruleGaming) {
     yaml += `
-  # Gaming y Entretenimiento
+  # Gaming
   - DOMAIN-SUFFIX,steampowered.com,🎮 Gaming
-  - DOMAIN-SUFFIX,steamcommunity.com,🎮 Gaming
   - DOMAIN-SUFFIX,epicgames.com,🎮 Gaming
   - DOMAIN-SUFFIX,ea.com,🎮 Gaming
-  - DOMAIN-SUFFIX,origin.com,🎮 Gaming
-  - DOMAIN-SUFFIX,blizzard.com,🎮 Gaming
-  - DOMAIN-SUFFIX,battle.net,🎮 Gaming
   - DOMAIN-SUFFIX,riotgames.com,🎮 Gaming
-  - DOMAIN-SUFFIX,minecraft.net,🎮 Gaming
+  - DOMAIN-SUFFIX,battle.net,🎮 Gaming
   - DOMAIN-SUFFIX,xbox.com,🎮 Gaming
-  - DOMAIN-SUFFIX,playstation.com,🎮 Gaming
 `;
-    ruleCount += 11;
+    ruleCount += 6;
   }
 
   yaml += `
   # Reglas generales
   - DOMAIN-SUFFIX,github.com,🚀 Selección Manual
-  - DOMAIN-SUFFIX,githubusercontent.com,🚀 Selección Manual
-  - DOMAIN-SUFFIX,amazon.com,🚀 Selección Manual
   - DOMAIN-SUFFIX,microsoft.com,🚀 Selección Manual
-  - DOMAIN-SUFFIX,live.com,🚀 Selección Manual
   - IP-CIDR,192.168.0.0/16,🎯 DIRECTO
   - IP-CIDR,10.0.0.0/8,🎯 DIRECTO
   - IP-CIDR,172.16.0.0/12,🎯 DIRECTO
   - IP-CIDR,127.0.0.0/8,🎯 DIRECTO
-  - IP-CIDR,100.64.0.0/10,🎯 DIRECTO
-  - IP-CIDR,224.0.0.0/4,🎯 DIRECTO
-  - IP-CIDR,fe80::/10,🎯 DIRECTO
   - MATCH,🚀 Selección Manual
 `;
-  ruleCount += 13;
+  ruleCount += 7;
 
   return { yaml, ruleCount };
 }
 
-function showError(message) {
-  const errorDiv = document.getElementById("error");
-  const errorMsg = document.getElementById("errorMsg");
-  errorMsg.textContent = message;
-  errorDiv.classList.remove("hidden");
-  document.getElementById("result").classList.add("hidden");
-}
-
-function hideError() {
-  document.getElementById("error").classList.add("hidden");
-}
-
-document.getElementById("generateBtn").addEventListener("click", () => {
-  hideError();
-  
+// Generar YAML
+function generateYaml() {
   const input = document.getElementById("input").value.trim();
   if (!input) {
-    showError("Por favor, pega tus enlaces de proxy");
+    alert("Por favor, pega tus enlaces de proxy");
     return;
   }
 
@@ -625,14 +810,14 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   );
   
   if (lines.length === 0) {
-    showError("No se encontraron enlaces válidos. Soporta: vmess://, vless://, trojan://, ss://");
+    alert("No se encontraron enlaces válidos");
     return;
   }
 
   const proxies = lines.map(parseProxy).filter(Boolean);
   
   if (proxies.length === 0) {
-    showError("No se pudieron decodificar los enlaces. Verifica que sean válidos.");
+    alert("No se pudieron decodificar los enlaces");
     return;
   }
 
@@ -651,7 +836,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   };
 
   const { yaml, ruleCount } = generateClashYaml(proxies, options);
-  yamlContent = yaml;
+  currentYamlContent = yaml;
 
   const groupCount = 4 + 
     (options.ruleStreaming ? 1 : 0) +
@@ -661,7 +846,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     (options.ruleGaming ? 1 : 0) +
     (options.ruleAds ? 1 : 0) + 2;
 
-  const blob = new Blob([yamlContent], { type: "text/yaml;charset=utf-8" });
+  const blob = new Blob([currentYamlContent], { type: "text/yaml;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   
   const link = document.getElementById("downloadLink");
@@ -671,19 +856,22 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("proxyCount").textContent = proxies.length;
   document.getElementById("groupCount").textContent = groupCount;
   document.getElementById("ruleCount").textContent = ruleCount;
-  document.getElementById("preview").textContent = yamlContent;
-  document.getElementById("result").classList.remove("hidden");
-});
+  document.getElementById("preview").textContent = currentYamlContent;
+  document.getElementById("generatorResult").classList.remove("hidden");
 
-document.getElementById("clearBtn").addEventListener("click", () => {
-  document.getElementById("input").value = "";
-  document.getElementById("result").classList.add("hidden");
-  hideError();
-});
+  // Guardar en historial
+  saveToHistory({
+    date: new Date().toLocaleString('es-ES'),
+    profileName: options.profileName,
+    proxyCount: proxies.length,
+    yaml: currentYamlContent
+  });
+}
 
-document.getElementById("copyBtn").addEventListener("click", () => {
-  navigator.clipboard.writeText(yamlContent).then(() => {
-    const btn = document.getElementById("copyBtn");
+// Copiar al portapapeles
+function copyToClipboard() {
+  navigator.clipboard.writeText(currentYamlContent).then(() => {
+    const btn = event.target;
     const originalText = btn.textContent;
     btn.textContent = "✅ Copiado!";
     btn.classList.add("bg-green-600");
@@ -693,10 +881,273 @@ document.getElementById("copyBtn").addEventListener("click", () => {
       btn.classList.remove("bg-green-600");
       btn.classList.add("bg-blue-600");
     }, 2000);
-  }).catch(err => {
-    alert("Error al copiar: " + err);
   });
-});
+}
+
+// Limpiar todo
+function clearAll() {
+  document.getElementById("input").value = "";
+  document.getElementById("generatorResult").classList.add("hidden");
+}
+
+// Importar desde URL
+async function importFromUrl() {
+  const url = document.getElementById("subscriptionUrl").value.trim();
+  if (!url) {
+    alert("Por favor ingresa una URL");
+    return;
+  }
+
+  document.getElementById("importError").classList.add("hidden");
+  
+  try {
+    const response = await fetch(url);
+    const text = await response.text();
+    const decoded = atob(text);
+    const lines = decoded.split('\n').filter(l => l.trim());
+    
+    importedProxies = lines.map(parseProxy).filter(Boolean);
+    
+    if (importedProxies.length === 0) {
+      throw new Error("No se encontraron proxies válidos en la URL");
+    }
+    
+    document.getElementById("importCount").textContent = importedProxies.length;
+    document.getElementById("importResult").classList.remove("hidden");
+  } catch (err) {
+    document.getElementById("importErrorMsg").textContent = err.message;
+    document.getElementById("importError").classList.remove("hidden");
+  }
+}
+
+function useImportedProxies() {
+  const proxyStrings = importedProxies.map(p => {
+    if (p.protocol === 'vmess') {
+      return 'vmess://' + btoa(JSON.stringify(p));
+    }
+    return `${p.protocol}://...`;
+  });
+  
+  document.getElementById("input").value = proxyStrings.join('\n');
+  switchTab('generator');
+  document.querySelectorAll('.tab-button')[0].click();
+}
+
+// Aplicar plantillas
+function applyTemplate(templateName) {
+  const templates = {
+    streaming: {
+      ruleStreaming: true,
+      ruleSocial: false,
+      ruleGoogle: true,
+      ruleAI: false,
+      ruleGaming: false,
+      ruleAds: false,
+      profileName: "Streaming 4K Optimizado"
+    },
+    gaming: {
+      ruleStreaming: false,
+      ruleSocial: false,
+      ruleGoogle: false,
+      ruleAI: false,
+      ruleGaming: true,
+      ruleAds: false,
+      profileName: "Gaming Pro - Baja Latencia"
+    },
+    privacy: {
+      ruleStreaming: false,
+      ruleSocial: false,
+      ruleGoogle: false,
+      ruleAI: false,
+      ruleGaming: false,
+      ruleAds: true,
+      profileName: "Máxima Privacidad"
+    },
+    china: {
+      ruleStreaming: true,
+      ruleSocial: true,
+      ruleGoogle: true,
+      ruleAI: true,
+      ruleGaming: false,
+      ruleAds: true,
+      profileName: "Bypass China GFW"
+    },
+    balanced: {
+      ruleStreaming: true,
+      ruleSocial: true,
+      ruleGoogle: true,
+      ruleAI: true,
+      ruleGaming: true,
+      ruleAds: true,
+      profileName: "Configuración Balanceada"
+    },
+    social: {
+      ruleStreaming: false,
+      ruleSocial: true,
+      ruleGoogle: false,
+      ruleAI: false,
+      ruleGaming: false,
+      ruleAds: false,
+      profileName: "Redes Sociales Optimizado"
+    }
+  };
+
+  const template = templates[templateName];
+  if (template) {
+    document.getElementById("profileName").value = template.profileName;
+    document.getElementById("ruleStreaming").checked = template.ruleStreaming;
+    document.getElementById("ruleSocial").checked = template.ruleSocial;
+    document.getElementById("ruleGoogle").checked = template.ruleGoogle;
+    document.getElementById("ruleAI").checked = template.ruleAI;
+    document.getElementById("ruleGaming").checked = template.ruleGaming;
+    document.getElementById("ruleAds").checked = template.ruleAds;
+    
+    document.getElementById("templateApplied").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("templateApplied").classList.add("hidden");
+    }, 3000);
+  }
+}
+
+// Validar enlaces
+function validateLinks() {
+  const input = document.getElementById("validatorInput").value.trim();
+  if (!input) {
+    alert("Por favor pega algunos enlaces para validar");
+    return;
+  }
+
+  const lines = input.split('\n').map(l => l.trim()).filter(l => l);
+  const results = document.getElementById("validationResults");
+  results.innerHTML = '';
+
+  let validCount = 0;
+  let invalidCount = 0;
+
+  lines.forEach((line, index) => {
+    const card = document.createElement('div');
+    card.className = 'server-card bg-gray-700 p-4 rounded-lg mb-2';
+    
+    const proxy = parseProxy(line);
+    
+    if (proxy) {
+      validCount++;
+      card.innerHTML = `
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center mb-2">
+              <span class="text-green-400 text-2xl mr-2">✓</span>
+              <span class="font-semibold">${proxy.ps || 'Sin nombre'}</span>
+            </div>
+            <div class="text-sm text-gray-300 space-y-1">
+              <div>🔌 Protocolo: <span class="text-blue-400">${proxy.protocol.toUpperCase()}</span></div>
+              <div>🌐 Servidor: <span class="text-blue-400">${proxy.add}</span></div>
+              <div>🔢 Puerto: <span class="text-blue-400">${proxy.port}</span></div>
+              ${proxy.net ? `<div>📡 Red: <span class="text-blue-400">${proxy.net}</span></div>` : ''}
+              ${proxy.tls ? `<div>🔒 TLS: <span class="text-green-400">Sí</span></div>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      invalidCount++;
+      card.className += ' border-2 border-red-500';
+      card.innerHTML = `
+        <div class="flex items-center">
+          <span class="text-red-400 text-2xl mr-2">✗</span>
+          <div>
+            <div class="font-semibold text-red-400">Enlace #${index + 1} - Inválido</div>
+            <div class="text-sm text-gray-400 mt-1">No se pudo decodificar este enlace</div>
+          </div>
+        </div>
+      `;
+    }
+    
+    results.appendChild(card);
+  });
+
+  const summary = document.createElement('div');
+  summary.className = 'bg-gray-900 p-4 rounded-lg mb-4';
+  summary.innerHTML = `
+    <div class="text-center">
+      <div class="text-2xl font-bold mb-2">Resumen de Validación</div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-green-900/30 p-3 rounded">
+          <div class="text-3xl font-bold text-green-400">${validCount}</div>
+          <div class="text-sm text-gray-300">Válidos</div>
+        </div>
+        <div class="bg-red-900/30 p-3 rounded">
+          <div class="text-3xl font-bold text-red-400">${invalidCount}</div>
+          <div class="text-sm text-gray-300">Inválidos</div>
+        </div>
+      </div>
+    </div>
+  `;
+  results.insertBefore(summary, results.firstChild);
+}
+
+// Historial
+function saveToHistory(data) {
+  historyData = historyData || [];
+  historyData.unshift(data);
+  if (historyData.length > 10) historyData.pop();
+}
+
+function loadHistory() {
+  const list = document.getElementById("historyList");
+  list.innerHTML = '';
+  
+  if (!historyData || historyData.length === 0) {
+    list.innerHTML = '<div class="text-center text-gray-400 py-8">No hay configuraciones guardadas</div>';
+    return;
+  }
+
+  historyData.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'bg-gray-700 p-4 rounded-lg hover:bg-gray-600 cursor-pointer';
+    card.innerHTML = `
+      <div class="flex justify-between items-start">
+        <div class="flex-1">
+          <div class="font-semibold text-lg mb-1">${item.profileName}</div>
+          <div class="text-sm text-gray-300">
+            📅 ${item.date} | 🔌 ${item.proxyCount} proxies
+          </div>
+        </div>
+        <button onclick="restoreFromHistory(${index})" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">
+          ↻ Restaurar
+        </button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function restoreFromHistory(index) {
+  const item = historyData[index];
+  currentYamlContent = item.yaml;
+  document.getElementById("preview").textContent = currentYamlContent;
+  document.getElementById("proxyCount").textContent = item.proxyCount;
+  document.getElementById("generatorResult").classList.remove("hidden");
+  
+  const blob = new Blob([currentYamlContent], { type: "text/yaml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.getElementById("downloadLink");
+  link.href = url;
+  link.download = "config.yaml";
+  
+  switchTab('generator');
+  document.querySelectorAll('.tab-button')[0].click();
+}
+
+function clearHistory() {
+  if (confirm('¿Estás seguro de que quieres borrar todo el historial?')) {
+    historyData = [];
+    loadHistory();
+  }
+}
+
+// Inicializar
+loadHistory();
 </script>
 </body>
 </html>
